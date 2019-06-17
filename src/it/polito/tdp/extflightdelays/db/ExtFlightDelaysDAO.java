@@ -10,7 +10,9 @@ import java.util.List;
 
 import it.polito.tdp.extflightdelays.model.Airline;
 import it.polito.tdp.extflightdelays.model.Airport;
+import it.polito.tdp.extflightdelays.model.AirportIdMap;
 import it.polito.tdp.extflightdelays.model.Flight;
+import it.polito.tdp.extflightdelays.model.Rotta;
 
 public class ExtFlightDelaysDAO {
 
@@ -63,6 +65,31 @@ public class ExtFlightDelaysDAO {
 		}
 	}
 	
+	public List<Rotta> getRotte(AirportIdMap aa){
+		List<Rotta> result = new LinkedList<Rotta>();
+		String sql = "SELECT origin_airport_id, destination_airport_id, AVG(DISTANCE) as media FROM flights GROUP BY origin_Airport_id, destination_airport_id";
+		
+		try {
+			Connection conn = DBConnect.getConnection();
+			PreparedStatement st = conn.prepareStatement(sql);
+			ResultSet rs = st.executeQuery();
+
+			while (rs.next()) {
+				Rotta r = new Rotta(aa.get(rs.getInt("origin_airport_id")), aa.get(rs.getInt("destination_airport_id")), rs.getInt("media"));
+				if(!result.contains(r))
+					result.add(r);
+			}
+
+			conn.close();
+			return result;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Errore connessione al database");
+			throw new RuntimeException("Error Connection Database");
+		}
+		
+	}
 	public double getDistanzaMedia(Airport a1, Airport a2) {
 		String sql = "select origin_airport_id, destination_airport_id, AVG(distance) as media from flights where origin_airport_id=? and destination_airport_id=? group by origin_airport_id, destination_airport_id";
 

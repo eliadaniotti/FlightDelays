@@ -48,11 +48,13 @@ public class FlightDelaysController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
-
+    	int distanza = Integer.parseInt(distanzaMinima.getText());
+    	model.creaGrafo(distanza);
     }
 
     @FXML
     void doTestConnessione(ActionEvent event) {
+    	txtResult.clear();
     	Airport a1 = cmbBoxAeroportoPartenza.getValue();
     	Airport a2 = cmbBoxAeroportoArrivo.getValue();
     	
@@ -77,7 +79,6 @@ public class FlightDelaysController {
 		this.model = model;
 		cmbBoxAeroportoPartenza.getItems().addAll(this.model.getAllAeroporti());
 		cmbBoxAeroportoArrivo.getItems().addAll(this.model.getAllAeroporti());
-		this.model.creaGrafo();
 	}
 }
 
