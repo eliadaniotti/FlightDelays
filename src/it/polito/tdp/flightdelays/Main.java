@@ -16,7 +16,7 @@ public class Main extends Application {
 			BorderPane root = (BorderPane)loader.load();
 			FlightDelaysController controller = loader.getController() ;
 			
-			Model model = new Model() ;
+			Model model = new Model();
 			controller.setModel(model);
 		
 			Scene scene = new Scene(root);

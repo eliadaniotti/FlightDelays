@@ -1,14 +1,13 @@
+package it.polito.tdp.flightdelays;
 
-
+import javafx.fxml.FXML;
 /**
  * Sample Skeleton for 'ExtFlightDelays.fxml' Controller Class
  */
-
-package it.polito.tdp.flightdelays;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.extflightdelays.model.Airport;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,8 +18,6 @@ import javafx.scene.control.TextField;
 /**
  * Sample Skeleton for 'FlightDelays.fxml' Controller Class
  */
-
-
 
 public class FlightDelaysController {
 	private Model model;
@@ -41,10 +38,10 @@ public class FlightDelaysController {
     private Button btnAnalizza; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoPartenza"
-    private ComboBox<String> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoArrivo"
-    private ComboBox<String> cmbBoxAeroportoArrivo; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoArrivo; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnAeroportiConnessi"
     private Button btnAeroportiConnessi; // Value injected by FXMLLoader
@@ -56,7 +53,13 @@ public class FlightDelaysController {
 
     @FXML
     void doTestConnessione(ActionEvent event) {
-
+    	Airport a1 = cmbBoxAeroportoPartenza.getValue();
+    	Airport a2 = cmbBoxAeroportoArrivo.getValue();
+    	
+    	if(model.areCollegati(a1, a2))
+    		txtResult.setText("Sono collegati");
+    	else
+    		txtResult.setText("NON sono collegati");
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -72,6 +75,9 @@ public class FlightDelaysController {
     
     public void setModel(Model model) {
 		this.model = model;
+		cmbBoxAeroportoPartenza.getItems().addAll(this.model.getAllAeroporti());
+		cmbBoxAeroportoArrivo.getItems().addAll(this.model.getAllAeroporti());
+		this.model.creaGrafo();
 	}
 }
 
